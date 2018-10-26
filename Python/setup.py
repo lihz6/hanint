@@ -5,7 +5,7 @@ with open('../README.md') as fh:
 
 setuptools.setup(
     name='hanint',
-    version='0.1.0',
+    version='0.1.1',
     author='李鸿章',
     author_email='paindo@163.com',
     description='数字转汉字，如：`101`转`一百零一`',
@@ -17,7 +17,12 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-    ]
+    ],
+    entry_points={
+        'console_scripts': [
+            'hanint = hanint.index:main'
+        ]
+    }
 )
 
 # python3 setup.py sdist bdist_wheel

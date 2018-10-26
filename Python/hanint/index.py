@@ -42,7 +42,15 @@ def _encode(num):
 
 # export API:
 def encode(num):
-    return '负' + _encode(-num) if num < 0 else _encode(num) if num > 0 else '零'
+    try:
+        num = int(num)
+    except:
+        return num
+    if num < 0:
+        return '负' + _encode(-num)
+    if num > 0:
+        return _encode(num)
+    return '零'
 
 
 def __decode(han):
@@ -68,7 +76,13 @@ def _decode(han):
 
 
 def decode(han):
-    return -_decode(han[1:]) if han.startswith('负') else _decode(han)
+    han = str(han)
+    try:
+        if han.startswith('负'):
+            return -_decode(han[1:])
+        return _decode(han)
+    except:
+        return int(han)
 
 
 def full2half(text):
@@ -79,6 +93,22 @@ def full2half(text):
     return text
 
 
+def main():
+    import sys
+    for arg in sys.argv[1:]:
+        try:
+            res = encode(arg)
+            if res != arg:
+                print('[E]', res)
+            else:
+                res = decode(arg)
+                print('[D]', res)
+        except:
+            print('[X]', arg)
+
+
+if __name__ == '__main__':
+    main()
 # 算法描述：
 
 # 1. 输入：4567890123

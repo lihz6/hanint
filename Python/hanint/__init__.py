@@ -1,6 +1,6 @@
-from hanint._hanint import full2half
-from hanint._hanint import encode
-from hanint._hanint import decode
+from hanint.index import full2half
+from hanint.index import encode
+from hanint.index import decode
 
 name = 'hanint'
 
