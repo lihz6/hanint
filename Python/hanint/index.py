@@ -7,6 +7,8 @@ _unit = reduce(
 )
 
 _base = '零一二三四五六七八九'
+_full = '０１２３４５６７８９'
+_half = '0123456789'
 
 
 def _step_1(nstr):
@@ -45,7 +47,7 @@ def encode(num):
     try:
         num = int(num)
     except:
-        return num
+        num = decode(num)
     if num < 0:
         return '负' + _encode(-num)
     if num > 0:
@@ -53,30 +55,23 @@ def encode(num):
     return '零'
 
 
-def __decode(han):
+def _decode(han):
     num = 0
     for u, p in ('兆', 16), ('亿', 8), ('万', 4), ('千', 3), ('百', 2), ('十', 1):
         if u not in han:
             continue
         i = han.index(u)
-        num += __decode(han[:i])*10**p
-        han = han[i+len(u):]
-    num += _base.index(han)
+        num += _decode(han[:i] or '一')*10**p
+        han = han[i+1:]
+    for u, p in zip(han, range(len(han)-1, -1, -1)):
+        num += _base.index(u)*10**p
     return num
 
 
-def _decode(han):
-    if han.startswith('十'):
-        han = '一'+han
-    if '两' in han:
-        han = han.replace('两', '二')
-    if '零' in han:
-        han = han.replace('零', '')
-    return __decode(han)
-
-
 def decode(han):
-    han = str(han)
+    han = str(han).replace('两', '二')
+    for h, f, b in zip(_half, _full, _base):
+        han = han.replace(h, b).replace(f, b)
     try:
         if han.startswith('负'):
             return -_decode(han[1:])
@@ -88,7 +83,7 @@ def decode(han):
 def full2half(text):
     if type(text) is not str:
         return text
-    for f, h in zip('０１２３４５６７８９', '0123456789'):
+    for f, h in zip(_full, _half):
         text = text.replace(f, h)
     return text
 
@@ -97,14 +92,12 @@ def main():
     import sys
     for arg in sys.argv[1:]:
         try:
-            res = encode(arg)
-            if res != arg:
-                print('[E]', res)
-            else:
-                res = decode(arg)
-                print('[D]', res)
+            print('[E]', encode(int(arg)))
         except:
-            print('[X]', arg)
+            try:
+                print('[D]', decode(arg))
+            except:
+                pass
 
 
 if __name__ == '__main__':

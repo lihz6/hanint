@@ -5,7 +5,7 @@ with open('../README.md') as fh:
 
 setuptools.setup(
     name='hanint',
-    version='0.1.1',
+    version='0.2.0',
     author='李鸿章',
     author_email='paindo@163.com',
     description='数字转汉字，如：`101`转`一百零一`',
